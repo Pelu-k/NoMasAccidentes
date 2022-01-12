@@ -3,9 +3,9 @@ package com.vdp.nomasaccidentes.models;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Administrador {
+public class Profesional {
   @Getter @Setter
-  private int Id_Adminn;
+  private int Id_Profesional;
 
   @Getter @Setter
   private String Nombre;
@@ -14,10 +14,7 @@ public class Administrador {
   private String Apellido;
 
   @Getter @Setter
-  private String Cargo;
-
-  @Getter @Setter
-  private long Rut;
+  private int Rut;
 
   @Getter @Setter
   private String RutDV;

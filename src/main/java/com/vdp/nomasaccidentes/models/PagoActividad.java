@@ -3,33 +3,31 @@ package com.vdp.nomasaccidentes.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.sql.Date;
 
-public class Asesoria {
-  @Getter @Setter
-  private int Id_Asesoria;
 
+public class PagoActividad {
   @Getter @Setter
-  private String Nombre;
+  private int Id_Pago_Act;
 
   @Getter @Setter
-  private int Numero;
+  private String Descripcion;
 
   @Getter @Setter
-  private String Desc_Asesoria;
+  private int Monto;
+
+  @Getter @Setter
+  private int Comision_Profesional;
 
   @Getter @Setter
   private Date Fecha_Creacion;
 
   @Getter @Setter
-  private Date Fecha_Termino;
+  private Date Fecha_Pago;
 
   @Getter @Setter
   private Date Fecha_Limite;
 
   @Getter @Setter
-  private int Id_Cliente_Fk;
-
-  @Getter @Setter
-  private int Id_Profesional_Fk;
+  private int Id_Actividad_Fk;
 }
