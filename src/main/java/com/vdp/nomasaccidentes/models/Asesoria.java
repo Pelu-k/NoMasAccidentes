@@ -35,4 +35,7 @@ public class Asesoria {
 
   @Getter @Setter
   private int idProfesionalFk;
+
+  @Getter @Setter
+  private String estado;
 }
