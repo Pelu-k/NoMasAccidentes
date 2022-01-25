@@ -3,28 +3,19 @@ package com.vdp.nomasaccidentes.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "ASISTENTE")
 public class Asistente {
+  @Getter @Setter
+  private int idAsistente;
 
-  @Id
-  @Getter @Setter @Column(name = "ID_ASISTENTE") @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int Id_Asistente;
+  @Getter @Setter
+  private String nombre;
 
-  @Getter @Setter @Column(name = "NOMBRE_A")
-  private String Nombre_A;
+  @Getter @Setter
+  private String apellido;
 
-  @Getter @Setter @Column(name = "APELLIDO_A")
-  private String Apellido_A;
+  @Getter @Setter
+  private int rut;
 
-  @Getter @Setter @Column(name = "RUT")
-  private int Rut;
-
-  @Getter @Setter @Column(name = "RUTDV")
-  private String RutDV;
-
-  @Getter @Setter @Column(name = "ID_ACTIVIDAD_FK")
-  private int Id_Actividad_Fk;
+  @Getter @Setter
+  private String rutDv;
 }

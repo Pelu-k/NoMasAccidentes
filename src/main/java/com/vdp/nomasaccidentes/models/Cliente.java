@@ -3,34 +3,37 @@ package com.vdp.nomasaccidentes.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "CLIENTE")
 public class Cliente {
+  @Getter @Setter
+  private int idCliente;
 
-  @Id
-  @Getter @Setter @Column(name = "ID_CLIENTE") @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int Id_Cliente;
+  @Getter @Setter
+  private String nombreEmpresa;
 
-  @Getter @Setter @Column(name = "RAZON_SOCIAL")
-  private String Razon_Social;
+  @Getter @Setter
+  private String razonSocial;
 
-  @Getter @Setter @Column(name = "RUBRO")
-  private String Rubro;
+  @Getter @Setter
+  private String rubro;
 
-  @Getter @Setter @Column(name = "ROL_EMP")
-  private int Rol_Emp;
+  @Getter @Setter
+  private int rolEmpresa;
 
-  @Getter @Setter @Column(name = "RUT_EMP")
-  private int Rut_Rep;
+  @Getter @Setter
+  private String rolDv;
 
-  @Getter @Setter @Column(name = "RUTDV_EMP")
-  private String RutDV_Rep;
+  @Getter @Setter
+  private String nombreRepresentante;
 
-  @Getter @Setter @Column(name = "INDICE_ACCIDENTABILIDAD")
-  private String Indice_Accidentabilidad;
+  @Getter @Setter
+  private int rutRepresentante;
 
-  @Getter @Setter @Column(name = "ID_USUARIO_FK")
-  private int Id_Usuario_Fk;
+  @Getter @Setter
+  private String rutDvRepresentante;
+
+  @Getter @Setter
+  private int cantidadEmpleados;
+
+  @Getter @Setter
+  private int idUsuarioFk;
 }

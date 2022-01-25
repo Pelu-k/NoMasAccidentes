@@ -3,13 +3,13 @@ package com.vdp.nomasaccidentes.models;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Especialidad {
+public class EspecialidadProfesional {
   @Getter @Setter
-  private int idEspecialidad;
+  private int idEspecialidadProfecional;
 
   @Getter @Setter
-  private String nombre;
+  private int idProfesionalFk;
 
   @Getter @Setter
-  private String descEspecialidad;
+  private int idEspecialidadFk;
 }

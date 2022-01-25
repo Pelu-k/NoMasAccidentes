@@ -3,13 +3,10 @@ package com.vdp.nomasaccidentes.models;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Comuna {
+public class EstadoUsr {
   @Getter @Setter
-  private int id;
+  private int idEstado;
 
   @Getter @Setter
-  private String nombreComuna;
-
-  @Getter @Setter
-  private int idRegionFK;
+  private String descripcion;
 }
