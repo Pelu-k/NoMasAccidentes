@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,5 +40,16 @@ public class AsesoriaController {
       return null;
     }
     return new AsesoriaImp().updateAdvisory(config(), obj);
+  }
+
+  @RequestMapping(value = "api/advisory", method = RequestMethod.GET)
+  public List<Asesoria> getAllAdvisory(@RequestHeader("Authorization") String token) throws SQLException {
+    if (token == null) {
+      return null;
+    }
+    if (!Jwts.parser().isSigned(token)) {
+      return null;
+    }
+    return new AsesoriaImp().getAllAdvisory(config());
   }
 }
