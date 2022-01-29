@@ -12,7 +12,7 @@ public class ActividadImp {
     statement.setString(1, actividad.getNombre().toUpperCase());
     statement.setString(2, actividad.getValor());
     statement.setString(3, actividad.getInsumoChecklist());
-    statement.setString(4, actividad.getEstado());
+    statement.setString(4, actividad.getEstado()); // enviar estado por defecto EN APROVACION
     statement.setString(5, actividad.getTipo().toLowerCase());
     statement.setDate(6, actividad.getFechaCreacion());
     statement.setDate(7, actividad.getFechaLimite());

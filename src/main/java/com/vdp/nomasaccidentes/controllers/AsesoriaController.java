@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class AsesoriaController {
   }
 
   @RequestMapping(value = "api/create-advisory", method = RequestMethod.POST)
-  public String createAdvisory(@RequestHeader("Authorization") String token,@RequestBody Asesoria asesoria) throws SQLException {
+  public String createAdvisory(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> asesoria) throws SQLException, ParseException {
     if (token == null) {
       return null;
     }
@@ -31,25 +32,25 @@ public class AsesoriaController {
     return new AsesoriaImp().createAdvisory(config(), asesoria);
   }
 
-  @RequestMapping(value = "api/update-advisory", method = RequestMethod.PUT)
-  public String updateAdvisory(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> obj) throws SQLException {
+  @RequestMapping(value = "api/update-advisory/{id}", method = RequestMethod.PUT)
+  public String updateAdvisory(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> asesoria) throws SQLException {
     if (token == null) {
       return null;
     }
     if (!Jwts.parser().isSigned(token)) {
       return null;
     }
-    return new AsesoriaImp().updateAdvisory(config(), obj);
+    return new AsesoriaImp().updateAdvisory(config(), asesoria);
   }
 
-  @RequestMapping(value = "api/advisory", method = RequestMethod.GET)
-  public List<Asesoria> getAllAdvisory(@RequestHeader("Authorization") String token) throws SQLException {
+  @RequestMapping(value = "api/advisory/{id}", method = RequestMethod.GET)
+  public List<Map<String, String>> getAllAdvisory(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
     if (token == null) {
       return null;
     }
     if (!Jwts.parser().isSigned(token)) {
       return null;
     }
-    return new AsesoriaImp().getAllAdvisory(config());
+    return new AsesoriaImp().getAllAdvisory(config(), id);
   }
 }

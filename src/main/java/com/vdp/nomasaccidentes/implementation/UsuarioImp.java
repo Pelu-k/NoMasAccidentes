@@ -1,6 +1,5 @@
 package com.vdp.nomasaccidentes.implementation;
 
-import com.vdp.nomasaccidentes.models.Usuario;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -14,20 +13,22 @@ public class UsuarioImp {
   /**
    * Obtener usuario por nombre de usuario
    */
-  public Usuario getUserByUsername(Connection con, String username) throws SQLException {
-    Usuario usuario = new Usuario();
+  public Map<String, String> getUserByUsername(Connection con, String username) throws SQLException {
+    //Usuario usuario = new Usuario();
+    Map<String, String> usuario = new HashMap<>();
     CallableStatement statement = con.prepareCall("{? = call getUserByUsername(?)}");
     statement.registerOutParameter(1, Types.REF_CURSOR);
     statement.setString(2, username);
     statement.execute();
     ResultSet resultSet = (ResultSet) statement.getObject(1);
     while (resultSet.next()) {
-      usuario.setIdUsuario(resultSet.getInt(1));
-      usuario.setUsername(resultSet.getString(2));
-      usuario.setHashPw(resultSet.getString(3));
-      usuario.setRol(resultSet.getInt(4));
-      usuario.setIdEstadoFk(resultSet.getInt(5));
-      usuario.setIdDatosFk(resultSet.getInt(6));
+      //usuario.put("id", Integer.toString(resultSet.getInt(1)));
+      usuario.put("username", resultSet.getString(1));
+      usuario.put("hashPw", resultSet.getString(2));
+      usuario.put("rol", Integer.toString(resultSet.getInt(3)));
+      usuario.put("idProfesional", Integer.toString(resultSet.getInt(4)));
+      //usuario.put("idEstadoFk", Integer.toString(resultSet.getInt(5)));
+      //usuario.put("idDatoFk", Integer.toString(resultSet.getInt(6)));
     }
     return usuario;
   }

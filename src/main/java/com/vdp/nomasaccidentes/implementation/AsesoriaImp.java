@@ -1,24 +1,25 @@
 package com.vdp.nomasaccidentes.implementation;
 
-import com.vdp.nomasaccidentes.models.Asesoria;
-
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AsesoriaImp {
-  public String createAdvisory(Connection con, Asesoria asesoria) throws SQLException {
-    CallableStatement statement = con.prepareCall("{call SPADDASESORIA(?,?,?,?,?,?,?,?,?)}");
-    statement.setString(1, asesoria.getNombre());
-    statement.setString(2, asesoria.getDescChecklist());
-    statement.setDate(3, asesoria.getFechaCreacion());
-    statement.setDate(4, asesoria.getFechaLimite());
-    statement.setDate(5, asesoria.getFechaTermino());
-    statement.setInt(6, asesoria.getValor());
-    statement.setInt(7, asesoria.getIdClienteFk());
-    statement.setInt(8, asesoria.getIdProfesionalFk());
-    statement.setString(9, asesoria.getEstado());
+
+  public String createAdvisory(Connection con, Map<String, String> asesoria) throws SQLException, ParseException {
+    CallableStatement statement = con.prepareCall("{call SPADDASESORIA(?,?,?,?,?,?,?,?)}");
+    statement.setString(1, asesoria.get("nombre"));
+    statement.setDate(2, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(asesoria.get("fechaCreacion")).getTime()));
+    statement.setDate(3, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(asesoria.get("fechaLimite")).getTime()));
+    statement.setDate(4, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(asesoria.get("fechaTermino")).getTime()));
+    statement.setInt(5, Integer.parseInt(asesoria.get("valor")));
+    statement.setInt(6, Integer.parseInt(asesoria.get("idClienteFk")));
+    statement.setInt(7, Integer.parseInt(asesoria.get("idProfesionalFk")));
+    statement.setString(8, "En aprobacion");
     statement.execute();
     return "Asesoria creada";
   }
@@ -31,25 +32,22 @@ public class AsesoriaImp {
     return "Estado asesoria modificado";
   }
 
-  public List<Asesoria> getAllAdvisory(Connection con) throws SQLException {
-    CallableStatement statement = con.prepareCall("{? = call FNALLASESORIA()}");
+  public List<Map<String, String>> getAllAdvisory(Connection con, int id) throws SQLException, NullPointerException {
+    CallableStatement statement = con.prepareCall("{? = call FNALLASESORIA(?)}");
     statement.registerOutParameter(1, Types.REF_CURSOR);
+    statement.setInt(2, id);
     statement.execute();
     ResultSet resultSet = (ResultSet) statement.getObject(1);
-    List<Asesoria> list = new ArrayList<>();
+    List<Map<String, String>> list = new ArrayList<>();
     while (resultSet.next()) {
-      Asesoria asesoria = new Asesoria();
-      asesoria.setIdAsesoria(resultSet.getInt(1));
-      asesoria.setNombre(resultSet.getString(2));
-      asesoria.setNumero(resultSet.getInt(3));
-      asesoria.setDescChecklist(resultSet.getString(4));
-      asesoria.setFechaCreacion(resultSet.getDate(5));
-      asesoria.setFechaLimite(resultSet.getDate(6));
-      asesoria.setFechaTermino(resultSet.getDate(7));
-      asesoria.setValor(resultSet.getInt(8));
-      asesoria.setIdClienteFk(resultSet.getInt(9));
-      asesoria.setIdProfesionalFk(resultSet.getInt(10));
-      asesoria.setEstado(resultSet.getString(11));
+      Map<String, String> asesoria = new HashMap<>();
+      asesoria.put("id", Integer.toString(resultSet.getInt(1)));
+      asesoria.put("nombre", resultSet.getString(2));
+      asesoria.put("numero",Integer.toString(resultSet.getInt(3)));
+      asesoria.put("valor", Integer.toString(resultSet.getInt(4)));
+      asesoria.put("estado",resultSet.getString(5));
+      asesoria.put("nombreEmpresa", resultSet.getString(6));
+      asesoria.put("nombreProfesional", resultSet.getString(7));
       list.add(asesoria);
     }
     return list;

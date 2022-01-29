@@ -2,7 +2,6 @@ package com.vdp.nomasaccidentes.controllers;
 
 import com.vdp.nomasaccidentes.connection.Conn;
 import com.vdp.nomasaccidentes.implementation.UsuarioImp;
-import com.vdp.nomasaccidentes.models.Usuario;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
@@ -22,19 +21,20 @@ public class LoginController {
   @RequestMapping(value = "api/login", method = RequestMethod.POST)
   public Map<String, String> login(@RequestBody Map<String, String> login) throws SQLException {
     // Obtener al usuario
-    Usuario usuario = new UsuarioImp().getUserByUsername(config(), login.get("username"));
+    Map<String, String> usuario = new UsuarioImp().getUserByUsername(config(), login.get("username"));
     // Validar usuario
     if (usuario == null) {
       return null;
     }
     // Validar contraseña
-    if (!usuario.getHashPw().equals(login.get("password"))) {
+    if (!usuario.get("hashPw").equals(login.get("password"))) {
       return null;
     }
     // Generar token
     Map<String, String> map = new HashMap<>();
-    map.put("token", new UsuarioImp().createToken(usuario.getUsername(), usuario.getRol()));
-    map.put("rol", Integer.toString(usuario.getRol()));
+    map.put("token", new UsuarioImp().createToken(usuario.get("username"), Integer.parseInt(usuario.get("rol"))));
+    map.put("rol", usuario.get("rol"));
+    map.put("idProfesional", usuario.get("idProfesional"));
     return map;
   }
 

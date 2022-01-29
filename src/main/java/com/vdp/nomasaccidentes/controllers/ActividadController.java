@@ -22,20 +22,6 @@ public class ActividadController {
     return conn.getConnect();
   }
 
-  @RequestMapping(value = "api/all-client", method = RequestMethod.GET)
-  public List<Map<String, String>> getAllClient(@RequestHeader("Authorization") String token) throws SQLException {
-    // validar token
-    if (token == null) {
-      return null;
-    }
-    // validar rol
-    if (!Jwts.parser().isSigned(token)) {
-      return null;
-    }
-    // obtener lista de actividades
-    return new UsuarioImp().getAllClient(config());
-  }
-
   @RequestMapping(value = "api/register-activity", method = RequestMethod.POST)
   public String registerActivity(@RequestHeader("Authorization") String token, @RequestBody Actividad actividad) throws SQLException {
     if (token == null) {
@@ -59,7 +45,7 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/all-activities", method = RequestMethod.GET)
-  public List<Actividad> updateActivity(@RequestHeader("Authorization") String token) throws SQLException {
+  public List<Actividad> getAllActivity(@RequestHeader("Authorization") String token) throws SQLException {
     if (token == null) {
       return null;
     }
@@ -70,7 +56,7 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/all-activity/{id}", method = RequestMethod.GET)
-  public List<Actividad> updateActivity(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
+  public List<Actividad> getAllActivityById(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
     if (token == null) {
       return null;
     }

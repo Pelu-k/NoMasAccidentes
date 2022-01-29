@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000/"}, methods = {RequestMethod.GET})
@@ -30,8 +31,8 @@ public class ClienteController {
     return new ClienteImp().getClientByUserId(config(), id);
   }
 
-  @RequestMapping(value = "api/clients", method = RequestMethod.GET)
-  public List<Cliente> getAllClient(@RequestHeader("Authorization") String token) throws SQLException {
+  @RequestMapping(value = "api/customers", method = RequestMethod.GET)
+  public List<Map<String, String>> getAllCustomers(@RequestHeader("Authorization") String token) throws SQLException {
     if (token == null) {
       return null;
     }
