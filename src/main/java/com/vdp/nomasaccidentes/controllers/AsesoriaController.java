@@ -32,7 +32,7 @@ public class AsesoriaController {
     return new AsesoriaImp().createAdvisory(config(), asesoria);
   }
 
-  @RequestMapping(value = "api/update-advisory/{id}", method = RequestMethod.PUT)
+  @RequestMapping(value = "api/update-advisory", method = RequestMethod.PUT)
   public String updateAdvisory(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> asesoria) throws SQLException {
     if (token == null) {
       return null;

@@ -2,13 +2,13 @@ package com.vdp.nomasaccidentes.controllers;
 
 import com.vdp.nomasaccidentes.connection.Conn;
 import com.vdp.nomasaccidentes.implementation.ActividadImp;
-import com.vdp.nomasaccidentes.implementation.UsuarioImp;
 import com.vdp.nomasaccidentes.models.Actividad;
 import io.jsonwebtoken.Jwts;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/register-activity", method = RequestMethod.POST)
-  public String registerActivity(@RequestHeader("Authorization") String token, @RequestBody Actividad actividad) throws SQLException {
+  public String registerActivity(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> actividad) throws SQLException, ParseException {
     if (token == null) {
       return "Ño";
     }

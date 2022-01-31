@@ -3,22 +3,24 @@ package com.vdp.nomasaccidentes.implementation;
 import com.vdp.nomasaccidentes.models.Actividad;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ActividadImp {
-  public String registerActivity(Connection con, Actividad actividad) throws SQLException {
-    CallableStatement statement = con.prepareCall("{call spAddActividad(?,?,?,?,?,?,?,?,?,?)}");
-    statement.setString(1, actividad.getNombre().toUpperCase());
-    statement.setString(2, actividad.getValor());
-    statement.setString(3, actividad.getInsumoChecklist());
-    statement.setString(4, actividad.getEstado()); // enviar estado por defecto EN APROVACION
-    statement.setString(5, actividad.getTipo().toLowerCase());
-    statement.setDate(6, actividad.getFechaCreacion());
-    statement.setDate(7, actividad.getFechaLimite());
-    statement.setDate(8, actividad.getFechaTermino());
-    statement.setString(9, actividad.getDescActividad());
-    statement.setInt(10, actividad.getIdAsesoriaFk());
+  public String registerActivity(Connection con, Map<String, String> actividad) throws SQLException, ParseException {
+    CallableStatement statement = con.prepareCall("{call spAddActividad(?,?,?,?,?,?,?,?,?)}");
+    statement.setString(1, actividad.get("nombre").toUpperCase());
+    statement.setString(2, actividad.get("valor"));
+    statement.setString(3, "EN APROBACION"); // enviar estado por defecto EN APROBACION
+    statement.setString(4, actividad.get("tipo").toLowerCase());
+    statement.setDate(5, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(actividad.get("fechaCreacion")).getTime()));
+    statement.setDate(6, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(actividad.get("fechaLimite")).getTime()));
+    statement.setDate(7, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(actividad.get("fechaTermino")).getTime()));
+    statement.setString(8, actividad.get("descActividad"));
+    statement.setInt(9, Integer.parseInt(actividad.get("idAsesoria")));
     statement.execute();
     return "Actividad registrada";
   }
@@ -74,14 +76,13 @@ public class ActividadImp {
       actividad.setNombre(resultSet.getString(2));
       actividad.setFolio(resultSet.getInt(3));
       actividad.setValor(resultSet.getString(4));
-      actividad.setInsumoChecklist(resultSet.getString(5));
-      actividad.setEstado(resultSet.getString(6));
-      actividad.setTipo(resultSet.getString(7));
-      actividad.setFechaCreacion(resultSet.getDate(8));
-      actividad.setFechaLimite(resultSet.getDate(9));
-      actividad.setFechaTermino(resultSet.getDate(10));
-      actividad.setDescActividad(resultSet.getString(11));
-      actividad.setIdAsesoriaFk(resultSet.getInt(12));
+      actividad.setEstado(resultSet.getString(5));
+      actividad.setTipo(resultSet.getString(6));
+      actividad.setFechaCreacion(resultSet.getDate(7));
+      actividad.setFechaLimite(resultSet.getDate(8));
+      actividad.setFechaTermino(resultSet.getDate(9));
+      actividad.setDescActividad(resultSet.getString(10));
+      actividad.setIdAsesoriaFk(resultSet.getInt(11));
       list.add(actividad);
     }
     return list;
