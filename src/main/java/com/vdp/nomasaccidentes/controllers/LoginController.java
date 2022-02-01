@@ -34,7 +34,7 @@ public class LoginController {
     Map<String, String> map = new HashMap<>();
     map.put("token", new UsuarioImp().createToken(usuario.get("username"), Integer.parseInt(usuario.get("rol"))));
     map.put("rol", usuario.get("rol"));
-    map.put("idProfesional", usuario.get("idProfesional"));
+    map.put("idUsuario", usuario.get("idProfesional"));
     return map;
   }
 
