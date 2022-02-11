@@ -22,13 +22,12 @@ public class UsuarioImp {
     statement.execute();
     ResultSet resultSet = (ResultSet) statement.getObject(1);
     while (resultSet.next()) {
-      //usuario.put("id", Integer.toString(resultSet.getInt(1)));
       usuario.put("username", resultSet.getString(1));
       usuario.put("hashPw", resultSet.getString(2));
       usuario.put("rol", Integer.toString(resultSet.getInt(3)));
       usuario.put("idProfesional", Integer.toString(resultSet.getInt(4)));
-      //usuario.put("idEstadoFk", Integer.toString(resultSet.getInt(5)));
-      //usuario.put("idDatoFk", Integer.toString(resultSet.getInt(6)));
+      usuario.put("nombre", resultSet.getString(5));
+      usuario.put("apellido", resultSet.getString(6));
     }
     return usuario;
   }

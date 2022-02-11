@@ -35,6 +35,7 @@ public class LoginController {
     map.put("token", new UsuarioImp().createToken(usuario.get("username"), Integer.parseInt(usuario.get("rol"))));
     map.put("rol", usuario.get("rol"));
     map.put("idUsuario", usuario.get("idProfesional"));
+    map.put("nombre", usuario.get("nombre") + " " + usuario.get("apellido"));
     return map;
   }
 
