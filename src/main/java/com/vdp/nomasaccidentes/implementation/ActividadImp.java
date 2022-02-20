@@ -6,6 +6,7 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,54 +39,21 @@ public class ActividadImp {
     return "Actividad actualizada";
   }
 
-  public List<Actividad> getAllActivities(Connection con) throws SQLException {
+  public List<Map<String, String>> getAllActivities(Connection con) throws SQLException {
     CallableStatement statement = con.prepareCall("{? = call fnAllActividad}");
     statement.registerOutParameter(1, Types.REF_CURSOR);
     statement.execute();
     ResultSet resultSet = (ResultSet) statement.getObject(1);
-    List<Actividad> list = new ArrayList<>();
-    while (resultSet.next()) {
-      Actividad actividad = new Actividad();
-      actividad.setIdActividad(resultSet.getInt(1));
-      actividad.setNombre(resultSet.getString(2));
-      actividad.setFolio(resultSet.getInt(3));
-      actividad.setValor(resultSet.getString(4));
-      actividad.setInsumoChecklist(resultSet.getString(5));
-      actividad.setEstado(resultSet.getString(6));
-      actividad.setTipo(resultSet.getString(7));
-      actividad.setFechaCreacion(resultSet.getDate(8));
-      actividad.setFechaLimite(resultSet.getDate(9));
-      actividad.setFechaTermino(resultSet.getDate(10));
-      actividad.setDescActividad(resultSet.getString(11));
-      actividad.setIdAsesoriaFk(resultSet.getInt(12));
-      list.add(actividad);
-    }
-    return list;
+    return convertToMap(resultSet);
   }
 
-  public List<Actividad> getAllActivitiesByIdAsesoria(Connection con, int idAsesoria) throws SQLException {
+  public List<Map<String, String>> getAllActivitiesByIdAsesoria(Connection con, int idAsesoria) throws SQLException {
     CallableStatement statement = con.prepareCall("{? = call fnActividadByIdAsesoria(?)}");
     statement.registerOutParameter(1, Types.REF_CURSOR);
     statement.setInt(2, idAsesoria);
     statement.execute();
     ResultSet resultSet = (ResultSet) statement.getObject(1);
-    List<Actividad> list = new ArrayList<>();
-    while (resultSet.next()) {
-      Actividad actividad = new Actividad();
-      actividad.setIdActividad(resultSet.getInt(1));
-      actividad.setNombre(resultSet.getString(2));
-      actividad.setFolio(resultSet.getInt(3));
-      actividad.setValor(resultSet.getString(4));
-      actividad.setEstado(resultSet.getString(5));
-      actividad.setTipo(resultSet.getString(6));
-      actividad.setFechaCreacion(resultSet.getDate(7));
-      actividad.setFechaLimite(resultSet.getDate(8));
-      actividad.setFechaTermino(resultSet.getDate(9));
-      actividad.setDescActividad(resultSet.getString(10));
-      actividad.setIdAsesoriaFk(resultSet.getInt(11));
-      list.add(actividad);
-    }
-    return list;
+    return convertToMap(resultSet);
   }
 
   public String deleteActivity(Connection con, int idActividad) throws SQLException {
@@ -94,5 +62,25 @@ public class ActividadImp {
     statement.setString(2, "Cancelada");
     statement.execute();
     return "Actividad cancelada";
+  }
+
+  private List<Map<String, String>> convertToMap(ResultSet resultSet) throws SQLException {
+    List<Map<String, String>> list = new ArrayList<>();
+    while (resultSet.next()) {
+      Map<String, String> actividad = new HashMap<>();
+      actividad.put("idActividad", Integer.toString(resultSet.getInt(1)));
+      actividad.put("nombre", resultSet.getString(2));
+      actividad.put("folio", Integer.toString(resultSet.getInt(3)));
+      actividad.put("valor", resultSet.getString(4));
+      actividad.put("estado", resultSet.getString(5));
+      actividad.put("tipo", resultSet.getString(6));
+      actividad.put("fechaCreacion", resultSet.getDate(7).toString());
+      actividad.put("fechaLimite", resultSet.getDate(8).toString());
+      actividad.put("fechaTermino", resultSet.getDate(9).toString());
+      actividad.put("descActividad", resultSet.getString(10));
+      actividad.put("idAsesoriaFk", Integer.toString(resultSet.getInt(11)));
+      list.add(actividad);
+    }
+    return list;
   }
 }

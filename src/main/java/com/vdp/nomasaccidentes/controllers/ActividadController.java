@@ -45,7 +45,7 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/all-activities", method = RequestMethod.GET)
-  public List<Actividad> getAllActivity(@RequestHeader("Authorization") String token) throws SQLException {
+  public List<Map<String, String>> getAllActivity(@RequestHeader("Authorization") String token) throws SQLException {
     if (token == null) {
       return null;
     }
@@ -56,7 +56,7 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/all-activity/{id}", method = RequestMethod.GET)
-  public List<Actividad> getAllActivityById(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
+  public List<Map<String, String>> getAllActivityByIdAsesoria(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
     if (token == null) {
       return null;
     }
