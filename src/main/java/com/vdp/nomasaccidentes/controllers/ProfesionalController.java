@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET})
+@CrossOrigin(origins = {"http://localhost:3000", "https://nmafront.herokuapp.com"}, methods = {RequestMethod.GET})
 public class ProfesionalController {
   private Connection config() throws SQLException {
     Conn conn = new Conn();

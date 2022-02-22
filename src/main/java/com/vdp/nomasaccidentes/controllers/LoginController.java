@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000/", "http://192.168.100.21:3000"}, methods = {RequestMethod.POST})
+@CrossOrigin(origins = {"http://localhost:3000/", "https://nmafront.herokuapp.com"}, methods = {RequestMethod.POST})
 public class LoginController {
 
   private Connection config() throws SQLException {

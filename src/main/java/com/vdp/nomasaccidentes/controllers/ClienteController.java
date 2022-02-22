@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000/"}, methods = {RequestMethod.GET})
+@CrossOrigin(origins = {"http://localhost:3000/", "https://nmafront.herokuapp.com"}, methods = {RequestMethod.GET})
 public class ClienteController {
 
   private Connection config() throws SQLException {
