@@ -26,15 +26,14 @@ public class ActividadImp {
     return "Actividad registrada";
   }
 
-  public String updateActvity(Connection con, Actividad actividad) throws SQLException {
-    CallableStatement statement = con.prepareCall("{call spUpdateActividad(?,?,?,?,?,?,?)}");
-    statement.setInt(1, actividad.getIdActividad());
-    statement.setString(2, actividad.getNombre().toUpperCase());
-    statement.setString(3, actividad.getValor());
-    statement.setString(4, actividad.getInsumoChecklist());
-    statement.setString(5, actividad.getEstado());
-    statement.setDate(6, actividad.getFechaLimite());
-    statement.setString(7, actividad.getDescActividad());
+  public String updateActvity(Connection con, Map<String, String> actividad) throws SQLException, ParseException {
+    CallableStatement statement = con.prepareCall("{call spUpdateActividad(?,?,?,?,?,?)}");
+    statement.setInt(1, Integer.parseInt(actividad.get("idActividad")));
+    statement.setString(2, actividad.get("nombre").toUpperCase());
+    statement.setString(3, actividad.get("valor"));
+    statement.setString(4, actividad.get("estado"));
+    statement.setDate(5, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(actividad.get("fechaLimite")).getTime()));
+    statement.setString(6, actividad.get("descActividad"));
     statement.execute();
     return "Actividad actualizada";
   }
@@ -45,6 +44,29 @@ public class ActividadImp {
     statement.execute();
     ResultSet resultSet = (ResultSet) statement.getObject(1);
     return convertToMap(resultSet);
+  }
+
+  public Map<String, String> getActivityById(Connection con, int id) throws SQLException {
+    CallableStatement statement = con.prepareCall("{? = call fnGetActivityById(?)}");
+    statement.registerOutParameter(1, Types.REF_CURSOR);
+    statement.setInt(2, id);
+    statement.execute();
+    ResultSet resultSet = (ResultSet) statement.getObject(1);
+    Map<String, String> actividad = new HashMap<>();
+    while (resultSet.next()){
+      actividad.put("idActividad", Integer.toString(resultSet.getInt(1)));
+      actividad.put("nombre", resultSet.getString(2));
+      actividad.put("folio", Integer.toString(resultSet.getInt(3)));
+      actividad.put("valor", resultSet.getString(4));
+      actividad.put("estado", resultSet.getString(5));
+      actividad.put("tipo", resultSet.getString(6));
+      actividad.put("fechaCreacion", resultSet.getDate(7).toString());
+      actividad.put("fechaLimite", resultSet.getDate(8).toString());
+      actividad.put("fechaTermino", resultSet.getDate(9).toString());
+      actividad.put("descActividad", resultSet.getString(10));
+      actividad.put("idAsesoriaFk", Integer.toString(resultSet.getInt(11)));
+    }
+    return actividad;
   }
 
   public List<Map<String, String>> getAllActivitiesByIdAsesoria(Connection con, int idAsesoria) throws SQLException {

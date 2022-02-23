@@ -34,7 +34,7 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/update-activity", method = RequestMethod.PUT)
-  public String updateActivity(@RequestHeader("Authorization") String token, @RequestBody Actividad actividad) throws SQLException {
+  public String updateActivity(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> actividad) throws SQLException, ParseException {
     if (token == null) {
       return "Ño";
     }
@@ -53,6 +53,17 @@ public class ActividadController {
       return null;
     }
     return new ActividadImp().getAllActivities(config());
+  }
+
+  @RequestMapping(value = "api/activity/{id}", method = RequestMethod.GET)
+  public Map<String, String> getActivityById(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
+    if (token == null) {
+      return null;
+    }
+    if (!Jwts.parser().isSigned(token)) {
+      return null;
+    }
+    return new ActividadImp().getActivityById(config(), id);
   }
 
   @RequestMapping(value = "api/all-activity/{id}", method = RequestMethod.GET)
