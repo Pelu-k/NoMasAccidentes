@@ -1,7 +1,5 @@
 package com.vdp.nomasaccidentes.implementation;
 
-import com.vdp.nomasaccidentes.models.Actividad;
-
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +13,7 @@ public class ActividadImp {
     CallableStatement statement = con.prepareCall("{call spAddActividad(?,?,?,?,?,?,?,?,?)}");
     statement.setString(1, actividad.get("nombre").toUpperCase());
     statement.setString(2, actividad.get("valor"));
-    statement.setString(3, "EN APROBACION"); // enviar estado por defecto EN APROBACION
+    statement.setString(3, "EN CURSO");
     statement.setString(4, actividad.get("tipo").toLowerCase());
     statement.setDate(5, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(actividad.get("fechaCreacion")).getTime()));
     statement.setDate(6, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(actividad.get("fechaLimite")).getTime()));
@@ -81,9 +79,17 @@ public class ActividadImp {
   public String deleteActivity(Connection con, int idActividad) throws SQLException {
     CallableStatement statement = con.prepareCall("{call spUpdateEstadoAct(?,?)}");
     statement.setInt(1, idActividad);
-    statement.setString(2, "Cancelada");
+    statement.setString(2, "CANCELADA");
     statement.execute();
     return "Actividad cancelada";
+  }
+
+  public String endActivity(Connection con, int idActividad) throws SQLException {
+    CallableStatement statement = con.prepareCall("{call spUpdateEstadoAct(?,?)}");
+    statement.setInt(1, idActividad);
+    statement.setString(2, "FINALIZADA");
+    statement.execute();
+    return "Actividad finalizada";
   }
 
   private List<Map<String, String>> convertToMap(ResultSet resultSet) throws SQLException {

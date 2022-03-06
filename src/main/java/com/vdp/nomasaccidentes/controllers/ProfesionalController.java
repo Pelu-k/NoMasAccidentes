@@ -19,7 +19,8 @@ public class ProfesionalController {
   }
 
   @RequestMapping(value = "api/professional/{id}", method = RequestMethod.GET)
-  public Map<String, String> getProfessionalById(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
+  public Map<String, String> getProfessionalById(@RequestHeader("Authorization") String token,
+                                                 @PathVariable int id) throws SQLException {
     Map<String, String> map = new HashMap<>();
     if (token == null) {
       map.put("error", "El token no existe");

@@ -11,7 +11,7 @@ import java.util.Map;
 public class AsesoriaImp {
 
   public String createAdvisory(Connection con, Map<String, String> asesoria) throws SQLException, ParseException {
-    CallableStatement statement = con.prepareCall("{call SPADDASESORIA(?,?,?,?,?,?,?,?)}");
+    CallableStatement statement = con.prepareCall("{call SPADDASESORIA(?,?,?,?,?,?,?,?,?)}");
     statement.setString(1, asesoria.get("nombre"));
     statement.setDate(2, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(asesoria.get("fechaCreacion")).getTime()));
     statement.setDate(3, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(asesoria.get("fechaLimite")).getTime()));
@@ -20,8 +20,9 @@ public class AsesoriaImp {
     statement.setInt(6, Integer.parseInt(asesoria.get("idClienteFk")));
     statement.setInt(7, Integer.parseInt(asesoria.get("idProfesionalFk")));
     statement.setString(8, "En aprobacion");
+    statement.setString(9, asesoria.get("categoria"));
     statement.execute();
-    return "Asesoria creada";
+    return asesoria.get("categoria") + " creada";
   }
 
   public String updateAdvisory(Connection con, Map<String, String> obj) throws SQLException {
@@ -48,6 +49,71 @@ public class AsesoriaImp {
       asesoria.put("estado",resultSet.getString(5));
       asesoria.put("nombreEmpresa", resultSet.getString(6));
       asesoria.put("nombreProfesional", resultSet.getString(7));
+      list.add(asesoria);
+    }
+    return list;
+  }
+
+  public List<Map<String, String>> getAllTrainings(Connection con, int id) throws SQLException, NullPointerException {
+    CallableStatement statement = con.prepareCall("{? = call FNALLCAPACITACION(?)}");
+    statement.registerOutParameter(1, Types.REF_CURSOR);
+    statement.setInt(2, id);
+    statement.execute();
+    ResultSet resultSet = (ResultSet) statement.getObject(1);
+    List<Map<String, String>> list = new ArrayList<>();
+    while (resultSet.next()) {
+      Map<String, String> capacitacion = new HashMap<>();
+      capacitacion.put("id", Integer.toString(resultSet.getInt(1)));
+      capacitacion.put("nombre", resultSet.getString(2));
+      capacitacion.put("numero",Integer.toString(resultSet.getInt(3)));
+      capacitacion.put("valor", Integer.toString(resultSet.getInt(4)));
+      capacitacion.put("estado",resultSet.getString(5));
+      capacitacion.put("nombreEmpresa", resultSet.getString(6));
+      capacitacion.put("nombreProfesional", resultSet.getString(7));
+      list.add(capacitacion);
+    }
+    return list;
+  }
+
+  public List<Map<String, String>> getAllAdvisoryClient(Connection con, int idCliente) throws SQLException, NullPointerException {
+    CallableStatement statement = con.prepareCall("{? = call fnAllAsesoriaCliente(?)}");
+    statement.registerOutParameter(1, Types.REF_CURSOR);
+    statement.setInt(2, idCliente);
+    statement.execute();
+    ResultSet resultSet = (ResultSet) statement.getObject(1);
+    List<Map<String, String>> list = new ArrayList<>();
+    while (resultSet.next()) {
+      Map<String, String> asesoria = new HashMap<>();
+      asesoria.put("id", Integer.toString(resultSet.getInt(1)));
+      asesoria.put("nombre", resultSet.getString(2));
+      asesoria.put("numero",Integer.toString(resultSet.getInt(3)));
+      asesoria.put("valor", Integer.toString(resultSet.getInt(4)));
+      asesoria.put("estado",resultSet.getString(5));
+      asesoria.put("nombreEmpresa", resultSet.getString(6));
+      asesoria.put("razonSocial", resultSet.getString(7));
+      asesoria.put("nombreProfesional", resultSet.getString(8));
+      list.add(asesoria);
+    }
+    return list;
+  }
+
+  public List<Map<String, String>> getAllTrainingsClient(Connection con, int idCliente) throws SQLException, NullPointerException {
+    CallableStatement statement = con.prepareCall("{? = call fnAllCapacitacionCliente(?)}");
+    statement.registerOutParameter(1, Types.REF_CURSOR);
+    statement.setInt(2, idCliente);
+    statement.execute();
+    ResultSet resultSet = (ResultSet) statement.getObject(1);
+    List<Map<String, String>> list = new ArrayList<>();
+    while (resultSet.next()) {
+      Map<String, String> asesoria = new HashMap<>();
+      asesoria.put("id", Integer.toString(resultSet.getInt(1)));
+      asesoria.put("nombre", resultSet.getString(2));
+      asesoria.put("numero",Integer.toString(resultSet.getInt(3)));
+      asesoria.put("valor", Integer.toString(resultSet.getInt(4)));
+      asesoria.put("estado",resultSet.getString(5));
+      asesoria.put("nombreEmpresa", resultSet.getString(6));
+      asesoria.put("razonSocial", resultSet.getString(7));
+      asesoria.put("nombreProfesional", resultSet.getString(8));
       list.add(asesoria);
     }
     return list;

@@ -23,7 +23,8 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/register-activity", method = RequestMethod.POST)
-  public String registerActivity(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> actividad) throws SQLException, ParseException {
+  public String registerActivity(@RequestHeader("Authorization") String token,
+                                 @RequestBody Map<String, String> actividad) throws SQLException, ParseException {
     if (token == null) {
       return "Ño";
     }
@@ -34,7 +35,8 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/update-activity", method = RequestMethod.PUT)
-  public String updateActivity(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> actividad) throws SQLException, ParseException {
+  public String updateActivity(@RequestHeader("Authorization") String token,
+                               @RequestBody Map<String, String> actividad) throws SQLException, ParseException {
     if (token == null) {
       return "Ño";
     }
@@ -42,6 +44,18 @@ public class ActividadController {
       return "Ño";
     }
     return new ActividadImp().updateActvity(config(), actividad);
+  }
+
+  @RequestMapping(value = "api/end-activity/{id}", method = RequestMethod.PUT)
+  public String endActivityById(@RequestHeader("Authorization") String token,
+                                @PathVariable int id) throws SQLException {
+    if (token == null) {
+      return null;
+    }
+    if (!Jwts.parser().isSigned(token)) {
+      return null;
+    }
+    return new ActividadImp().endActivity(config(), id);
   }
 
   @RequestMapping(value = "api/all-activities", method = RequestMethod.GET)
@@ -56,7 +70,8 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/activity/{id}", method = RequestMethod.GET)
-  public Map<String, String> getActivityById(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
+  public Map<String, String> getActivityById(@RequestHeader("Authorization") String token,
+                                             @PathVariable int id) throws SQLException {
     if (token == null) {
       return null;
     }
@@ -67,7 +82,8 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/all-activity/{id}", method = RequestMethod.GET)
-  public List<Map<String, String>> getAllActivityByIdAsesoria(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
+  public List<Map<String, String>> getAllActivityByIdAsesoria(@RequestHeader("Authorization") String token,
+                                                              @PathVariable int id) throws SQLException {
     if (token == null) {
       return null;
     }
@@ -78,7 +94,8 @@ public class ActividadController {
   }
 
   @RequestMapping(value = "api/delete-activity/{id}", method = RequestMethod.DELETE)
-  public String deleteActivity(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
+  public String deleteActivity(@RequestHeader("Authorization") String token,
+                               @PathVariable int id) throws SQLException {
     if (token == null) {
       return null;
     }

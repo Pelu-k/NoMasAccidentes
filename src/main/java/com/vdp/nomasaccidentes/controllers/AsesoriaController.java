@@ -21,8 +21,11 @@ public class AsesoriaController {
     return conn.getConnect();
   }
 
+  // PROFESIONAL
+
   @RequestMapping(value = "api/create-advisory", method = RequestMethod.POST)
-  public String createAdvisory(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> asesoria) throws SQLException, ParseException {
+  public String createAdvisory(@RequestHeader("Authorization") String token,
+                               @RequestBody Map<String, String> asesoria) throws SQLException, ParseException {
     if (token == null) {
       return null;
     }
@@ -33,7 +36,8 @@ public class AsesoriaController {
   }
 
   @RequestMapping(value = "api/update-advisory", method = RequestMethod.PUT)
-  public String updateAdvisory(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> asesoria) throws SQLException {
+  public String updateAdvisory(@RequestHeader("Authorization") String token,
+                               @RequestBody Map<String, String> asesoria) throws SQLException {
     if (token == null) {
       return null;
     }
@@ -44,7 +48,8 @@ public class AsesoriaController {
   }
 
   @RequestMapping(value = "api/advisory/{id}", method = RequestMethod.GET)
-  public List<Map<String, String>> getAllAdvisory(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
+  public List<Map<String, String>> getAllAdvisory(@RequestHeader("Authorization") String token,
+                                                  @PathVariable int id) throws SQLException {
     if (token == null) {
       return null;
     }
@@ -53,4 +58,43 @@ public class AsesoriaController {
     }
     return new AsesoriaImp().getAllAdvisory(config(), id);
   }
+
+  @RequestMapping(value = "api/trainings/{id}", method = RequestMethod.GET)
+  public List<Map<String, String>> getAllTrainings(@RequestHeader("Authorization") String token,
+                                                   @PathVariable int id) throws SQLException {
+    if (token == null) {
+      return null;
+    }
+    if (!Jwts.parser().isSigned(token)) {
+      return null;
+    }
+    return new AsesoriaImp().getAllTrainings(config(), id);
+  }
+
+  // CLIENTE
+
+  @RequestMapping(value = "api/advisory/client/{id}", method = RequestMethod.GET)
+  public List<Map<String, String>> getAllAdvisoryClient(@RequestHeader("Authorization") String token,
+                                                  @PathVariable int id) throws SQLException {
+    if (token == null) {
+      return null;
+    }
+    if (!Jwts.parser().isSigned(token)) {
+      return null;
+    }
+    return new AsesoriaImp().getAllAdvisoryClient(config(), id);
+  }
+
+  @RequestMapping(value = "api/trainings/client/{id}", method = RequestMethod.GET)
+  public List<Map<String, String>> getAllTrainingsClient(@RequestHeader("Authorization") String token,
+                                                   @PathVariable int id) throws SQLException {
+    if (token == null) {
+      return null;
+    }
+    if (!Jwts.parser().isSigned(token)) {
+      return null;
+    }
+    return new AsesoriaImp().getAllTrainingsClient(config(), id);
+  }
+
 }

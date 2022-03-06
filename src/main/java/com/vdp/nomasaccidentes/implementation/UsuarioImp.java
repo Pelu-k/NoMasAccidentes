@@ -1,5 +1,6 @@
 package com.vdp.nomasaccidentes.implementation;
 
+import com.vdp.nomasaccidentes.connection.Conn;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -28,6 +29,25 @@ public class UsuarioImp {
       usuario.put("idProfesional", Integer.toString(resultSet.getInt(4)));
       usuario.put("nombre", resultSet.getString(5));
       usuario.put("apellido", resultSet.getString(6));
+    }
+    return usuario;
+  }
+
+  public Map<String, String> getUserByUsernameCliente(Connection con, String username) throws SQLException {
+    //Usuario usuario = new Usuario();
+    Map<String, String> usuario = new HashMap<>();
+    CallableStatement statement = con.prepareCall("{? = call getUserByUsernameCliente(?)}");
+    statement.registerOutParameter(1, Types.REF_CURSOR);
+    statement.setString(2, username);
+    statement.execute();
+    ResultSet resultSet = (ResultSet) statement.getObject(1);
+    while (resultSet.next()) {
+      usuario.put("username", resultSet.getString(1));
+      usuario.put("hashPw", resultSet.getString(2));
+      usuario.put("rol", Integer.toString(resultSet.getInt(3)));
+      usuario.put("idCliente", Integer.toString(resultSet.getInt(4)));
+      usuario.put("razonSocial", resultSet.getString(5));
+      usuario.put("nombreRepresentante", resultSet.getString(6));
     }
     return usuario;
   }

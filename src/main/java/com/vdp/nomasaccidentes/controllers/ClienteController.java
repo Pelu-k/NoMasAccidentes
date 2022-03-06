@@ -21,7 +21,8 @@ public class ClienteController {
   }
 
   @RequestMapping(value = "api/client/{id}", method = RequestMethod.GET)
-  public Cliente getClientByUserId(@RequestHeader("Authorization") String token, @PathVariable int id) throws SQLException {
+  public Cliente getClientByUserId(@RequestHeader("Authorization") String token,
+                                   @PathVariable int id) throws SQLException {
     if (token == null) {
       return null;
     }
