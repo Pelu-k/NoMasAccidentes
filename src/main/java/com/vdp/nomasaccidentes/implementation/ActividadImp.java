@@ -10,16 +10,17 @@ import java.util.Map;
 
 public class ActividadImp {
   public String registerActivity(Connection con, Map<String, String> actividad) throws SQLException, ParseException {
-    CallableStatement statement = con.prepareCall("{call spAddActividad(?,?,?,?,?,?,?,?,?)}");
+    CallableStatement statement = con.prepareCall("{call spAddActividad(?,?,?,?,?,?,?,?,?,?)}");
     statement.setString(1, actividad.get("nombre").toUpperCase());
     statement.setString(2, actividad.get("valor"));
-    statement.setString(3, "EN CURSO");
+    statement.setString(3, "EN APROBACION");
     statement.setString(4, actividad.get("tipo").toLowerCase());
     statement.setDate(5, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(actividad.get("fechaCreacion")).getTime()));
     statement.setDate(6, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(actividad.get("fechaLimite")).getTime()));
     statement.setDate(7, new Date(new SimpleDateFormat("yyyy-MM-dd").parse(actividad.get("fechaTermino")).getTime()));
     statement.setString(8, actividad.get("descActividad"));
     statement.setInt(9, Integer.parseInt(actividad.get("idAsesoria")));
+    statement.setString(10, actividad.get("checklist"));
     statement.execute();
     return "Actividad registrada";
   }
@@ -92,6 +93,27 @@ public class ActividadImp {
     return "Actividad finalizada";
   }
 
+  public String getChecklist(Connection con, int idActividad) throws SQLException {
+    CallableStatement statement = con.prepareCall("{? = call fnObtenerCheckByIdActividad(?)}");
+    statement.registerOutParameter(1, Types.REF_CURSOR);
+    statement.setInt(2, idActividad);
+    statement.execute();
+    ResultSet resultSet = (ResultSet) statement.getObject(1);
+    String result = "";
+    while (resultSet.next()) {
+      result = resultSet.getString(1);
+    }
+    return result;
+  }
+
+  public String updateChecklist(Connection con, Map<String, String> actividad) throws SQLException {
+    CallableStatement statement = con.prepareCall("{call spActualizarChecklist(?,?)}");
+    statement.setString(1, actividad.get("checklist"));
+    statement.setInt(2, Integer.parseInt(actividad.get("idActividad")));
+    statement.execute();
+    return "Checklist actualizado";
+  }
+
   private List<Map<String, String>> convertToMap(ResultSet resultSet) throws SQLException {
     List<Map<String, String>> list = new ArrayList<>();
     while (resultSet.next()) {
@@ -107,6 +129,7 @@ public class ActividadImp {
       actividad.put("fechaTermino", resultSet.getDate(9).toString());
       actividad.put("descActividad", resultSet.getString(10));
       actividad.put("idAsesoriaFk", Integer.toString(resultSet.getInt(11)));
+      actividad.put("checklist", resultSet.getString(12));
       list.add(actividad);
     }
     return list;

@@ -105,4 +105,28 @@ public class ActividadController {
     return new ActividadImp().deleteActivity(config(), id);
   }
 
+  @RequestMapping(value = "api/update-checklist", method = RequestMethod.PUT)
+  public String updateChecklist(@RequestHeader("Authorization") String token,
+                                @RequestBody Map<String, String> actividad) throws SQLException {
+    if (token == null) {
+      return null;
+    }
+    if (!Jwts.parser().isSigned(token)) {
+      return null;
+    }
+    return new ActividadImp().updateChecklist(config(), actividad);
+  }
+
+  @RequestMapping(value = "api/get-checklist/{idActividad}", method = RequestMethod.GET)
+  public String getChecklist(@RequestHeader("Authorization") String token,
+                             @PathVariable int idActividad) throws SQLException {
+    if (token == null) {
+      return null;
+    }
+    if (!Jwts.parser().isSigned(token)) {
+      return null;
+    }
+    return new ActividadImp().getChecklist(config(), idActividad);
+  }
+
 }
